@@ -35,6 +35,7 @@ jobs:
     
     - name: 'Notify Slack - Lint Success'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -44,6 +45,7 @@ jobs:
 
     - name: 'Notify Slack - Lint Failed'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -75,6 +77,7 @@ jobs:
     
     - name: 'Notify Slack - Security Passed'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -84,6 +87,7 @@ jobs:
 
     - name: 'Notify Slack - Security Warning'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -131,6 +135,7 @@ jobs:
     
     - name: 'Notify Slack - Tests Passed'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -140,6 +145,7 @@ jobs:
 
     - name: 'Notify Slack - Tests Failed'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -189,6 +195,7 @@ jobs:
     
     - name: 'Notify Slack - Build Success'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -198,6 +205,7 @@ jobs:
 
     - name: 'Notify Slack - Build Failed'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -225,6 +233,7 @@ jobs:
     
     - name: 'Notify Slack - Deploy Success'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -234,6 +243,7 @@ jobs:
 
     - name: 'Notify Slack - Deploy Failed'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -279,6 +289,7 @@ jobs:
     
     - name: 'Notify Slack - Release Success'
       if: success()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -288,6 +299,7 @@ jobs:
 
     - name: 'Notify Slack - Release Failed'
       if: failure()
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -314,6 +326,7 @@ jobs:
         echo "Release: ${{ needs.release.result }}"
 
     - name: 'Notify Slack - Pipeline Complete'
+      continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
