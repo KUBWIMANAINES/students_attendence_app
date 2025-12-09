@@ -3,14 +3,14 @@
 A simple CRUD notes application built with Node.js, Express, MySQL, and Bootstrap, implementing a complete DevOps pipeline for learning and demonstration purposes.
 
 ## 🚀 Features
-
+git
 - **CRUD Operations**: Create, Read, Update, Delete notes
 - **Responsive UI**: Bootstrap-based frontend with modern design
 - **REST API**: RESTful endpoints for note management
 - **Database Integration**: MySQL for persistent data storage
 - **Health Monitoring**: Built-in health check endpoints
 - **Containerization**: Docker support with multi-stage builds
-- **CI/CD Pipeline**: GitHub Actions for automated testing and deployment
+- **CI/CD Pipeline**: GitHub Actions for automated testing and deployment welop  kyufgio
 
 ## 📋 Table of Contents
 
