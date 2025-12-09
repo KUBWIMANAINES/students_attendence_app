@@ -2,6 +2,24 @@
   "name": "attendance-app",
   "version": "1.0.0",
   "description": "Simple Student Attendance App with DevOps pipeline",
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "devops",
+    "attendance"
+  ],
+  "homepage": "https://github.com/KUBWIMANAINES/students_attendence_app#readme",
+  "bugs": {
+    "url": "https://github.com/KUBWIMANAINES/students_attendence_app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KUBWIMANAINES/students_attendence_app.git"
+  },
+  "license": "MIT",
+  "author": "DevOps Student",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -13,14 +31,12 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mysql2": "^3.6.5"
+    "mysql2": "^3.6.5",
+    "prom-client": "^14.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
     "jest": "^29.7.0",
     "eslint": "^8.55.0"
-  },
-  "keywords": ["nodejs", "express", "mysql", "devops", "attendance"],
-  "author": "DevOps Student",
-  "license": "MIT"
+  }
 }

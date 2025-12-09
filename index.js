@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const promClient = require('prom-client');
 const path = require('path');
 const app = express();
 
@@ -7,6 +8,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+// Prometheus metrics
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+collectDefaultMetrics({ timeout: 5000 });
+const attendanceCounter = new promClient.Counter({
+  name: 'attendance_events_total',
+  help: 'Total attendance events recorded',
+  labelNames: ['status']
+});
+
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', promClient.register.contentType);
+    res.end(await promClient.register.metrics());
+  } catch (err) {
+    res.status(500).end(err.message);
+  }
+});
 
 // Database configuration
 const dbConfig = {
@@ -124,7 +144,7 @@ app.post('/api/students/:id/attendance', async (req, res) => {
   const formattedDate = attendanceDate.toISOString().slice(0, 10);
 
   if (!['present', 'absent'].includes(status)) {
-    return res.status(400).json({ error: "Status must be 'present' or 'absent'" });
+    return res.status(400).json({ error: 'Status must be \'present\' or \'absent\'' });
   }
 
   try {
@@ -139,6 +159,9 @@ app.post('/api/students/:id/attendance', async (req, res) => {
        ON DUPLICATE KEY UPDATE status = VALUES(status), note = VALUES(note), created_at = CURRENT_TIMESTAMP`,
       [id, formattedDate, status, note || null]
     );
+
+    // increment Prometheus counter
+    try { attendanceCounter.inc({ status }, 1); } catch(e) { /* ignore metric errors */ }
 
     res.json({ message: 'Attendance recorded', date: formattedDate, status });
   } catch (error) {
@@ -204,7 +227,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8001;
 
 async function startServer() {
   await initDB();
