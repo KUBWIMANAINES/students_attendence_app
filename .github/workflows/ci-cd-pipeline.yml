@@ -36,6 +36,7 @@ jobs:
         if: success()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "✅ Linting Passed",
@@ -49,13 +50,12 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: 'Notify Slack - Lint Failed'
         if: failure()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "❌ Linting Failed",
@@ -69,8 +69,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Stage 2: Security Scanning
   security:
@@ -105,6 +103,7 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "🔒 Security Checks Completed",
@@ -118,8 +117,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Stage 3: Run Tests
   test:
@@ -153,6 +150,7 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "🧪 Tests Completed",
@@ -166,8 +164,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Stage 4: Build Docker Image
   build:
@@ -216,6 +212,7 @@ jobs:
         if: success()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "🐳 Docker Image Built & Pushed",
@@ -229,8 +226,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Stage 5: Deploy to Kubernetes
   deploy:
@@ -270,6 +265,7 @@ jobs:
         if: success()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "🚀 Deployment Successful",
@@ -283,13 +279,12 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: 'Notify Slack - Deploy Failed'
         if: failure()
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "❌ Deployment Failed",
@@ -303,8 +298,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Stage 6: Release & Notify
   release:
@@ -337,6 +330,7 @@ jobs:
       - name: 'Notify Slack - Release Published'
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "📦 Release Published",
@@ -350,8 +344,6 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # Final: Pipeline Summary
   summary:
@@ -372,6 +364,7 @@ jobs:
       - name: 'Notify Slack - Pipeline Complete'
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "Pipeline Complete",
@@ -385,5 +378,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
