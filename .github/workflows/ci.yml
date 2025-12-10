@@ -37,21 +37,45 @@ jobs:
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "✅ Code Quality Passed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*✅ Code Quality Passed*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "✅ Code Quality Passed\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}"
 
     - name: 'Notify Slack - Lint Failed'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Code Quality Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Code Quality Failed*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "❌ Code Quality Failed\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nLogs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   # Stage 2: Security Checks
   security:
@@ -79,21 +103,45 @@ jobs:
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "🔒 Security Check Passed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🔒 Security Check Passed*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "🔒 Security Check Passed\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}"
 
     - name: 'Notify Slack - Security Warning'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "⚠️ Security Issues Found",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*⚠️ Security Issues Found*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Check:* npm audit"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "⚠️ Security Issues Found\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCheck: npm audit"
 
   # Stage 3: Run Tests
   test:
@@ -137,21 +185,45 @@ jobs:
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "🧪 Tests Passed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🧪 Tests Passed*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "🧪 Tests Passed\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}"
 
     - name: 'Notify Slack - Tests Failed'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Tests Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Tests Failed*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "❌ Tests Failed\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nLogs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   # Stage 4: Build & Push Docker Image
   build:
@@ -197,21 +269,45 @@ jobs:
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "🐳 Docker Image Built & Pushed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🐳 Docker Image Built & Pushed*\n*Image:* ${{ env.IMAGE_NAME }}\n*Tag:* ${{ github.sha }}\n*Repository:* ${{ github.repository }}"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "🐳 Docker Image Built & Pushed\nImage: ${{ env.IMAGE_NAME }}\nTag: ${{ github.sha }}\nRepository: ${{ github.repository }}"
 
     - name: 'Notify Slack - Build Failed'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Docker Build Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Docker Build Failed*\n*Repository:* ${{ github.repository }}\n*Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "❌ Docker Build Failed\nRepository: ${{ github.repository }}\nLogs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   # Stage 5: Deploy
   deploy:
@@ -228,28 +324,51 @@ jobs:
       run: |
         echo "🚀 Deploying to production..."
         echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-        # Add your deployment commands here
         echo "✅ Deployment completed"
     
     - name: 'Notify Slack - Deploy Success'
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "🚀 Deployment Successful",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🚀 Deployment Successful*\n*Environment:* Production\n*Repository:* ${{ github.repository }}\n*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\n*Deployed by:* ${{ github.actor }}"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "🚀 Deployment Successful\nEnvironment: Production\nRepository: ${{ github.repository }}\nCommit: ${{ github.sha }}\nDeployed by: ${{ github.actor }}"
 
     - name: 'Notify Slack - Deploy Failed'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Deployment Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Deployment Failed*\n*Environment:* Production\n*Repository:* ${{ github.repository }}\n*Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "❌ Deployment Failed\nEnvironment: Production\nRepository: ${{ github.repository }}\nLogs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   # Stage 6: Release
   release:
@@ -303,21 +422,45 @@ jobs:
       if: success()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "📦 Release Published",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*📦 Release Published*\n*Version:* v${{ steps.version.outputs.version }}\n*Repository:* ${{ github.repository }}\n*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "📦 Release Published\nVersion: v${{ steps.version.outputs.version }}\nRepository: ${{ github.repository }}\nCommit: ${{ github.sha }}"
 
     - name: 'Notify Slack - Release Failed'
       if: failure()
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Release Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Release Failed*\n*Repository:* ${{ github.repository }}\n*Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "❌ Release Failed\nRepository: ${{ github.repository }}\nLogs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   # Final: Pipeline Summary
   summary:
@@ -340,8 +483,33 @@ jobs:
     - name: 'Notify Slack - Pipeline Complete'
       continue-on-error: true
       uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "✅ Pipeline Complete",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*✅ Pipeline Complete*\n*Lint:* ${{ needs.lint.result }}\n*Security:* ${{ needs.security.result }}\n*Tests:* ${{ needs.test.result }}\n*Build:* ${{ needs.build.result }}\n*Deploy:* ${{ needs.deploy.result }}\n*Release:* ${{ needs.release.result }}"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow"
+                    },
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                ]
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      with:
-        slack-message: "✅ Pipeline Complete\n🧹 Lint: ${{ needs.lint.result }}\n🔒 Security: ${{ needs.security.result }}\n🧪 Tests: ${{ needs.test.result }}\n🐳 Build: ${{ needs.build.result }}\n🚀 Deploy: ${{ needs.deploy.result }}\n📦 Release: ${{ needs.release.result }}"
