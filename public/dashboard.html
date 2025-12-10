@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        .stat-card {
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card.primary { border-left-color: #0d6efd; }
+        .stat-card.success { border-left-color: #198754; }
+        .stat-card.danger { border-left-color: #dc3545; }
+        .stat-card.warning { border-left-color: #ffc107; }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-chart-bar"></i> Attendance System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-user-check"></i> Mark Attendance
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard.html">
+                            <i class="fas fa-chart-bar"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports.html">
+                            <i class="fas fa-file-pdf"></i> Reports
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+                <p class="text-muted">Overview of attendance statistics and performance</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn btn-primary" onclick="refreshData()">
+                    <i class="fas fa-sync"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card stat-card primary">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Total Students</h6>
+                        <h2 id="totalStudents" class="mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stat-card success">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Present Today</h6>
+                        <h2 id="presentToday" class="mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stat-card danger">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Absent Today</h6>
+                        <h2 id="absentToday" class="mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stat-card warning">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Attendance Rate</h6>
+                        <h2 id="attendanceRate" class="mb-0">0%</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Today's Attendance</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="todayChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Weekly Trend (Last 7 Days)</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Performance Table -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Student Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Roll No</th>
+                                        <th>Total Days</th>
+                                        <th>Present</th>
+                                        <th>Absent</th>
+                                        <th>Attendance %</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="performanceTable">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let todayChart, weeklyChart;
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+
+        async function loadDashboard() {
+            await Promise.all([
+                loadStats(),
+                loadTodayChart(),
+                loadWeeklyChart(),
+                loadPerformance()
+            ]);
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/students');
+                const students = await res.json();
+                
+                const today = new Date().toISOString().split('T')[0];
+                let presentCount = 0, absentCount = 0;
+
+                for (const student of students) {
+                    const attendanceRes = await fetch(`/api/students/${student.id}/attendance?start=${today}&end=${today}`);
+                    const attendance = await attendanceRes.json();
+                    if (attendance.length > 0) {
+                        if (attendance[0].status === 'present') presentCount++;
+                        else absentCount++;
+                    }
+                }
+
+                document.getElementById('totalStudents').textContent = students.length;
+                document.getElementById('presentToday').textContent = presentCount;
+                document.getElementById('absentToday').textContent = absentCount;
+                
+                const rate = students.length > 0 ? Math.round((presentCount / students.length) * 100) : 0;
+                document.getElementById('attendanceRate').textContent = rate + '%';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadTodayChart() {
+            try {
+                const res = await fetch('/api/students');
+                const students = await res.json();
+                
+                const today = new Date().toISOString().split('T')[0];
+                let present = 0, absent = 0, notMarked = 0;
+
+                for (const student of students) {
+                    const attendanceRes = await fetch(`/api/students/${student.id}/attendance?start=${today}&end=${today}`);
+                    const attendance = await attendanceRes.json();
+                    if (attendance.length === 0) notMarked++;
+                    else if (attendance[0].status === 'present') present++;
+                    else absent++;
+                }
+
+                const ctx = document.getElementById('todayChart').getContext('2d');
+                if (todayChart) todayChart.destroy();
+                
+                todayChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Present', 'Absent', 'Not Marked'],
+                        datasets: [{
+                            data: [present, absent, notMarked],
+                            backgroundColor: ['#198754', '#dc3545', '#e9ecef'],
+                            borderColor: ['#fff', '#fff', '#fff'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadWeeklyChart() {
+            try {
+                const res = await fetch('/api/students');
+                const students = await res.json();
+                
+                const last7Days = [];
+                const labels = [];
+                
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                    last7Days.push(date.toISOString().split('T')[0]);
+                }
+
+                const presentCounts = [];
+                for (const date of last7Days) {
+                    let count = 0;
+                    for (const student of students) {
+                        const attendanceRes = await fetch(`/api/students/${student.id}/attendance?start=${date}&end=${date}`);
+                        const attendance = await attendanceRes.json();
+                        if (attendance.length > 0 && attendance[0].status === 'present') count++;
+                    }
+                    presentCounts.push(count);
+                }
+
+                const ctx = document.getElementById('weeklyChart').getContext('2d');
+                if (weeklyChart) weeklyChart.destroy();
+                
+                weeklyChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Present',
+                            data: presentCounts,
+                            borderColor: '#198754',
+                            backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#198754'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadPerformance() {
+            try {
+                const res = await fetch('/api/students');
+                const students = await res.json();
+                const tbody = document.getElementById('performanceTable');
+
+                let rows = '';
+                for (const student of students) {
+                    const attendanceRes = await fetch(`/api/students/${student.id}/attendance?start=&end=`);
+                    const attendance = await attendanceRes.json();
+                    
+                    const present = attendance.filter(a => a.status === 'present').length;
+                    const absent = attendance.filter(a => a.status === 'absent').length;
+                    const total = present + absent;
+                    const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
+                    
+                    let statusBadge = '<span class="badge bg-success">Good</span>';
+                    if (percentage < 75) statusBadge = '<span class="badge bg-danger">At Risk</span>';
+                    else if (percentage < 85) statusBadge = '<span class="badge bg-warning">Average</span>';
+
+                    rows += `
+                        <tr>
+                            <td><strong>${student.name}</strong></td>
+                            <td>${student.roll_no || '-'}</td>
+                            <td>${total}</td>
+                            <td><span class="badge bg-success">${present}</span></td>
+                            <td><span class="badge bg-danger">${absent}</span></td>
+                            <td><strong>${percentage}%</strong></td>
+                            <td>${statusBadge}</td>
+                        </tr>
+                    `;
+                }
+
+                tbody.innerHTML = rows || '<tr><td colspan="7" class="text-center text-muted">No students</td></tr>';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function refreshData() {
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>
